@@ -291,4 +291,22 @@ class CollectionTest extends TestCase
             ])
         ], $result->all());
     }
+
+    public function testSlice()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $result = $collection->slice(0);
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $result->all());
+
+        $result = $collection->slice(2, 5);
+        $this->assertEqualsCanonicalizing([3, 4, 5, 6, 7], $result->all());
+
+        // 3 angka tertinggi
+        $highest_three = $collection->sortByDesc(function ($value) {
+            return $value;
+        })->take(3);
+
+        $this->assertEqualsCanonicalizing([10, 9, 8], $highest_three->all());
+    }
 }
