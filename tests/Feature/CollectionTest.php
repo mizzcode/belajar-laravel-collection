@@ -178,4 +178,37 @@ class CollectionTest extends TestCase
 
         $this->assertEquals('Mizz Kun and Jani', $collection->join(' ', ' and '));
     }
+
+    public function testFilter()
+    {
+        $collection = collect([
+            'Mizz' => 90,
+            'Jani' => 66,
+            'Salman' => 87,
+        ]);
+
+        $result = $collection->filter(function ($value) {
+            return $value > 80;
+        });
+
+        $this->assertEquals([
+            'Mizz' => 90,
+            'Salman' => 87
+        ], $result->all());
+    }
+
+    public function testFilterIndex()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $result = $collection->filter(function ($value) {
+            return $value % 2 == 0;
+        });
+
+        // pakai Equals yang Canonicalizing agar tidak peduli urutan index yang penting value nya sama
+        $this->assertEqualsCanonicalizing([2, 4, 6, 8, 10], $result->all());
+
+        // jika tidak maka eror karena index nya berbeda atau sama filter ini di buang index nya
+        // $this->assertEquals([2, 4, 6, 8, 10], $result->all());
+    }
 }
