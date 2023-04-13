@@ -242,4 +242,53 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection1->contains('Mizz'));
         $this->assertTrue($collection2->has('name'));
     }
+
+    public function testGrouping()
+    {
+        $collection = collect([
+            [
+                'name' => 'mizz',
+                'department' => 'it'
+            ],
+            [
+                'name' => 'jani',
+                'department' => 'it'
+            ],
+            [
+                'name' => 'salman',
+                'department' => 'hr'
+            ],
+            [
+                'name' => 'nandar',
+                'department' => 'hr'
+            ],
+        ]);
+
+        $result = $collection->groupBy(function ($key) {
+            return strtoupper($key['department']);
+        });
+
+        $this->assertEquals([
+            'IT' => collect([
+                [
+                    'name' => 'mizz',
+                    'department' => 'it'
+                ],
+                [
+                    'name' => 'jani',
+                    'department' => 'it'
+                ],
+            ]),
+            'HR' => collect([
+                [
+                    'name' => 'salman',
+                    'department' => 'hr'
+                ],
+                [
+                    'name' => 'nandar',
+                    'department' => 'hr'
+                ],
+            ])
+        ], $result->all());
+    }
 }
