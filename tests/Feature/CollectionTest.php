@@ -309,4 +309,40 @@ class CollectionTest extends TestCase
 
         $this->assertEqualsCanonicalizing([10, 9, 8], $highest_three->all());
     }
+
+    public function testTake()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $result = $collection->take(5);
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5], $result->all());
+
+        $result = $collection->takeUntil(function ($value) {
+            return $value == 4;
+        });
+        $this->assertEqualsCanonicalizing([1, 2, 3], $result->all());
+
+        $result = $collection->takeWhile(function ($value) {
+            return $value < 5;
+        });
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4], $result->all());
+    }
+
+    public function testSkip()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $result = $collection->skip(5);
+        $this->assertEqualsCanonicalizing([6, 7, 8, 9, 10], $result->all());
+
+        $result = $collection->skipUntil(function ($value) {
+            return $value == 5;
+        });
+        $this->assertEqualsCanonicalizing([5, 6, 7, 8, 9, 10], $result->all());
+
+        $result = $collection->skipWhile(function ($value) {
+            return $value < 5;
+        });
+        $this->assertEqualsCanonicalizing([5, 6, 7, 8, 9, 10], $result->all());
+    }
 }
