@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Data\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -35,5 +36,71 @@ class CollectionTest extends TestCase
 
         $this->assertEquals(3, $result);
         $this->assertEqualsCanonicalizing([1, 2], $collection->all());
+    }
+
+    public function testMap()
+    {
+        $collection = collect([1, 2, 3]);
+        $result = $collection->map(function ($item) {
+            return $item * 2;
+        });
+
+        $this->assertEqualsCanonicalizing([2, 4, 6], $result->all());
+    }
+
+    public function testMapInto()
+    {
+        $collection = collect(['Mizz']);
+        $result = $collection->mapInto(Person::class);
+
+        $this->assertEquals([new Person('Mizz')], $result->all());
+    }
+
+    public function testMapSpread()
+    {
+        $collection = collect([
+            ['Mizz', 'Kun'],
+            ['Jani', 'Chan']
+        ]);
+
+        $result = $collection->mapSpread(function ($firstName, $lastName) {
+            $fullName = $firstName . " " . $lastName;
+            return new Person($fullName);
+        });
+
+        $this->assertEquals([new Person('Mizz Kun'), new Person('Jani Chan')], $result->all());
+    }
+
+    public function testMapToGroups()
+    {
+        $collection = collect([
+            [
+                'name' => 'Mizz',
+                'department' => 'IT'
+            ],
+            [
+                'name' => 'Jani',
+                'department' => 'IT'
+            ],
+            [
+                'name' => 'Salman',
+                'department' => 'HR'
+            ],
+            [
+                'name' => 'Ferdi',
+                'department' => 'HR'
+            ],
+        ]);
+
+        $result = $collection->mapToGroups(function ($person) {
+            return [
+                $person['department'] => $person['name']
+            ];
+        });
+
+        $this->assertEquals([
+            'IT' => collect(['Mizz', 'Jani']),
+            'HR' => collect(['Salman', 'Ferdi'])
+        ], $result->all());
     }
 }
