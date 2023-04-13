@@ -416,4 +416,21 @@ class CollectionTest extends TestCase
         $result = $collection->sortDesc();
         $this->assertEqualsCanonicalizing([9, 8, 7, 6, 5, 4, 3, 2, 1], $result->all());
     }
+
+    public function testAggregate()
+    {
+        $collection = collect([1, 3, 2, 4, 6, 5, 8, 7, 9]);
+
+        $result = $collection->sum();
+        $this->assertEquals(45, $result);
+
+        $result = $collection->avg();
+        $this->assertEquals(5, $result);
+
+        $result = $collection->min();
+        $this->assertEquals(1, $result);
+
+        $result = $collection->max();
+        $this->assertEquals(9, $result);
+    }
 }
