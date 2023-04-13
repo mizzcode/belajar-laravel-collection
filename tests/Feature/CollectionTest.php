@@ -211,4 +211,26 @@ class CollectionTest extends TestCase
         // jika tidak maka eror karena index nya berbeda atau sama filter ini di buang index nya
         // $this->assertEquals([2, 4, 6, 8, 10], $result->all());
     }
+    // mirip filter, hanya saja di partiton yang data nya bernilai false akan tetap ada
+    public function testPartition()
+    {
+        $collection = collect([
+            'Mizz' => 90,
+            'Jani' => 66,
+            'Salman' => 87,
+        ]);
+
+        [$result1, $result2] = $collection->partition(function ($value) {
+            return $value > 80;
+        });
+
+        $this->assertEquals([
+            'Mizz' => 90,
+            'Salman' => 87
+        ], $result1->all());
+
+        $this->assertEquals([
+            'Jani' => 66,
+        ], $result2->all());
+    }
 }
