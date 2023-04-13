@@ -405,4 +405,15 @@ class CollectionTest extends TestCase
             return $val == 9;
         }));
     }
+
+    public function testOrdering()
+    {
+        $collection = collect([1, 3, 2, 4, 6, 5, 8, 7, 9]);
+
+        $result = $collection->sort();
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
+
+        $result = $collection->sortDesc();
+        $this->assertEqualsCanonicalizing([9, 8, 7, 6, 5, 4, 3, 2, 1], $result->all());
+    }
 }
