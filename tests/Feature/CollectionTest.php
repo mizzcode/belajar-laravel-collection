@@ -357,4 +357,30 @@ class CollectionTest extends TestCase
         $this->assertEqualsCanonicalizing([7, 8, 9], $result->all()[2]->all());
         $this->assertEqualsCanonicalizing([10, 11, 12], $result->all()[3]->all());
     }
+
+    public function testRetrieve()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        $result = $collection->first();
+
+        $this->assertEquals(1, $result);
+
+        $result = $collection->first(function ($value) {
+            return $value > 6;
+        });
+
+        $this->assertEquals(7, $result);
+
+
+        $result = $collection->last();
+
+        $this->assertEquals(9, $result);
+
+        $result = $collection->last(function ($value) {
+            return $value < 9;
+        });
+
+        $this->assertEquals(8, $result);
+    }
 }
