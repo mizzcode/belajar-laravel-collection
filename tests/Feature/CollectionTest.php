@@ -137,4 +137,38 @@ class CollectionTest extends TestCase
             'address' => 'Tegal'
         ], $collection3->all());
     }
+
+    public function testCollapse()
+    {
+        $collection = collect([
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+        ]);
+
+        $result = $collection->collapse();
+        // collection nested menjadi flat
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
+    }
+
+    public function testFlatMap()
+    {
+        $collection = collect([
+            [
+                'name' => 'Mizz',
+                'hobbies' => ['Coding', 'Gaming']
+            ],
+            [
+                'name' => 'Jani',
+                'hobbies' => ['Seblak', 'Sambel']
+            ]
+        ]);
+
+        // tiap collection di iterasi data nya kemudian di kirim ke callback
+        $hobbies = $collection->flatMap(function ($item) {
+            return $item['hobbies'];
+        });
+
+        $this->assertEqualsCanonicalizing(['Coding', 'Gaming', 'Seblak', 'Sambel'], $hobbies->all());
+    }
 }
