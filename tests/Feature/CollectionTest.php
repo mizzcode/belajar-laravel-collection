@@ -392,4 +392,17 @@ class CollectionTest extends TestCase
 
         $this->assertTrue(in_array($result, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
     }
+
+    public function testCheckingExistence()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        $this->assertTrue($collection->isNotEmpty());
+        $this->assertFalse($collection->isEmpty());
+        $this->assertTrue($collection->contains(4));
+        $this->assertFalse($collection->contains(10));
+        $this->assertTrue($collection->contains(function ($val) {
+            return $val == 9;
+        }));
+    }
 }
