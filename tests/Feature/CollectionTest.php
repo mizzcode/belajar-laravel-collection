@@ -233,4 +233,13 @@ class CollectionTest extends TestCase
             'Jani' => 66,
         ], $result2->all());
     }
+
+    public function testTesting()
+    {
+        $collection1 = collect(['Mizz', 'Jani', 'Ewin']);
+        $collection2 = collect(['name' => 'mizz']);
+
+        $this->assertTrue($collection1->contains('Mizz'));
+        $this->assertTrue($collection2->has('name'));
+    }
 }
